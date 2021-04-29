@@ -7,6 +7,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/linear_layout_for_images"
         tools:context=".ui.gallery.GalleryFragment"
         android:orientation="vertical">
         <!--ImageView to preview the selected image-->
@@ -19,18 +20,6 @@
             android:textColor="@android:color/white"
             android:layout_gravity="center"
             android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/IVPreviewImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/BSelectImage"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:visibility="gone"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp" />
-
         <Button
             android:id="@+id/translateTextButton"
             android:layout_width="wrap_content"
@@ -39,6 +28,8 @@
             android:layout_gravity="center"
             android:text="TRANSLATE TEXT"
             android:textColor="@android:color/white"
+            android:visibility="gone"
             android:textSize="18sp" />
     </LinearLayout>
+
 </ScrollView>

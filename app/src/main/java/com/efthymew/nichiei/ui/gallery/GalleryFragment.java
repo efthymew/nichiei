@@ -7,12 +7,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,12 +48,12 @@ public class GalleryFragment extends Fragment {
 
     private Button selectImageButton;
     private Button translateButton;
-    private ImageView previewImage;
     private Uri imageUri;
     private ContentResolver cr;
 
     private List<String> text;
 
+    private LinearLayout parent;
     int SELECT_PICTURE = 200;
 
 
@@ -59,9 +62,8 @@ public class GalleryFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         cr = getContext().getContentResolver();
         selectImageButton = root.findViewById(R.id.BSelectImage);
-        previewImage = root.findViewById(R.id.IVPreviewImage);
         translateButton = root.findViewById(R.id.translateTextButton);
-
+        parent = root.findViewById(R.id.linear_layout_for_images);
         translateButton.setOnClickListener(
                 new View.OnClickListener() {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -87,36 +89,8 @@ public class GalleryFragment extends Fragment {
         Intent i = new Intent();
         i.setType("image/*");
         i.setAction(Intent.ACTION_GET_CONTENT);
-
-        //make image visible
-        previewImage.setVisibility(View.VISIBLE);
-
         startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
     }
-
-//    private class DetectTextTask extends AsyncTask<Uri, Integer, List<String>> {
-//
-//        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-//        @Override
-//        protected List<String> doInBackground(Uri... images) {
-//            List<String> detectedText = new ArrayList<>();
-//            int count = images.length;
-//            for (int i = 0; i < count; i++) {
-//
-//            }
-//            return detectedText;
-//        }
-//
-//        @Override
-//        protected void onProgressUpdate(Integer... progress) {
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<String> result) {
-//            text = result;
-//            Log.i("Text detected: ", String.valueOf(text));
-//        }
-//    }
 
     private void detectText() {
         Log.i("Notif:", "Beginner worker text detection!");
@@ -162,7 +136,15 @@ public class GalleryFragment extends Fragment {
                 imageUri = selectedImageUri;
                 if (null != selectedImageUri) {
                     // update the preview image in the layout
-                    previewImage.setImageURI(selectedImageUri);
+                    for (int i = 0; i < 3; i++) {
+                        ImageView im = new ImageView(getContext());
+                        im.setImageURI(selectedImageUri);
+                        im.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        im.setAdjustViewBounds(true);
+                        parent.addView(im);
+                    }
+
+                    translateButton.setVisibility(View.VISIBLE);
                 }
             }
         }
