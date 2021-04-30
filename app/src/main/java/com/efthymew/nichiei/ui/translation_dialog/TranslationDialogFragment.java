@@ -15,6 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.efthymew.nichiei.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,6 +37,7 @@ import java.io.IOException;
  */
 public class TranslationDialogFragment extends DialogFragment {
     private TranslationDialogViewModel translationViewModel;
+    private FrameLayout parent;
     public static String TAG = "TranslationDialog";
 
     public TranslationDialogFragment() {
@@ -52,12 +56,16 @@ public class TranslationDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_translation_dialog, container, false);
+        parent = v.findViewById(R.id.dialog_root);
         // Inflate the layout for this fragment
         translationViewModel = ViewModelProviders.of(getActivity()).get(TranslationDialogViewModel.class);
+        TextView text = new TextView(getContext());
+        text.setText(translationViewModel.getTranslation().getValue());
+        parent.addView(text);
         return v;
     }
 
-    public void detectText(TranslationDialogViewModel viewModel, FragmentManager ft, String tag) {
+    public void detectText(final TranslationDialogViewModel viewModel, final FragmentManager ft, final String tag) {
         InputImage image = viewModel.getImage().getValue();
         if (image == null) {
             Log.i("Notif", "No image selected!");
@@ -73,6 +81,8 @@ public class TranslationDialogFragment extends DialogFragment {
                                 // Task completed successfully
                                 // ...
                                 Log.i("Text processed!", visionText.getText());
+                                viewModel.setTranslation(visionText.getText());
+                                show(ft, tag);
                             }
                         })
                         .addOnFailureListener(
@@ -84,6 +94,5 @@ public class TranslationDialogFragment extends DialogFragment {
                                     }
                                 });
 
-        show(ft, tag);
     }
 }

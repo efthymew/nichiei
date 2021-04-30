@@ -39,13 +39,15 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         final FloatingActionButton fab = findViewById(R.id.fab);
         newFragment = TranslationDialogFragment.newInstance();
+        translationViewModel = ViewModelProviders.of(this).get(TranslationDialogViewModel.class);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 newFragment.detectText(translationViewModel, getSupportFragmentManager(), TranslationDialogFragment.TAG);
             }
         });
-        translationViewModel = ViewModelProviders.of(this).get(TranslationDialogViewModel.class);
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each

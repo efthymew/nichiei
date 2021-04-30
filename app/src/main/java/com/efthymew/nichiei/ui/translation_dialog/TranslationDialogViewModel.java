@@ -8,6 +8,7 @@ import com.google.mlkit.vision.common.InputImage;
 
 public class TranslationDialogViewModel extends ViewModel {
     private MutableLiveData<InputImage> image = new MutableLiveData<>();
+    private MutableLiveData<String> translation = new MutableLiveData<>();
 
     public TranslationDialogViewModel() {
     }
@@ -18,5 +19,13 @@ public class TranslationDialogViewModel extends ViewModel {
 
     public void setImage(InputImage newImage) {
         image.setValue(newImage);
+    }
+
+    public LiveData<String> getTranslation() {
+        return translation;
+    }
+
+    public void setTranslation(String text) {
+        translation.setValue(text);
     }
 }
