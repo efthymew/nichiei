@@ -20,16 +20,6 @@
             android:textColor="@android:color/white"
             android:layout_gravity="center"
             android:textSize="18sp" />
-        <Button
-            android:id="@+id/translateTextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimary"
-            android:layout_gravity="center"
-            android:text="TRANSLATE TEXT"
-            android:textColor="@android:color/white"
-            android:visibility="gone"
-            android:textSize="18sp" />
     </LinearLayout>
 
 </ScrollView>

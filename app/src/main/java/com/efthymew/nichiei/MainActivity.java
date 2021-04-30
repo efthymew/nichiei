@@ -1,15 +1,20 @@
 package com.efthymew.nichiei;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
+import com.efthymew.nichiei.ui.translation_dialog.TranslationDialogFragment;
+import com.efthymew.nichiei.ui.translation_dialog.TranslationDialogViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -24,7 +29,8 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-
+    private TranslationDialogViewModel translationViewModel;
+    private TranslationDialogFragment newFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +38,14 @@ public class MainActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final FloatingActionButton fab = findViewById(R.id.fab);
+        newFragment = TranslationDialogFragment.newInstance();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                newFragment.detectText(translationViewModel, getSupportFragmentManager(), TranslationDialogFragment.TAG);
             }
         });
+        translationViewModel = ViewModelProviders.of(this).get(TranslationDialogViewModel.class);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDestinationChanged(@NonNull NavController controller,
                                              @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                translationViewModel.setImage(null);
                 if(destination.getId() == R.id.nav_gallery) {
                     fab.show();
                     toolbar.setVisibility(View.GONE);

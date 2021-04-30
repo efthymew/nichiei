@@ -26,6 +26,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.efthymew.nichiei.R;
+import com.efthymew.nichiei.ui.translation_dialog.TranslationDialogViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -47,10 +48,9 @@ import java.util.Set;
 public class GalleryFragment extends Fragment {
 
     private Button selectImageButton;
-    private Button translateButton;
     private Uri imageUri;
     private ContentResolver cr;
-
+    private TranslationDialogViewModel translationViewModel;
     private List<String> text;
 
     private LinearLayout parent;
@@ -62,18 +62,8 @@ public class GalleryFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         cr = getContext().getContentResolver();
         selectImageButton = root.findViewById(R.id.BSelectImage);
-        translateButton = root.findViewById(R.id.translateTextButton);
         parent = root.findViewById(R.id.linear_layout_for_images);
-        translateButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public void onClick(View v) {
-                        detectText();
-                    }
-                }
-        );
-
+        translationViewModel = ViewModelProviders.of(getActivity()).get(TranslationDialogViewModel.class);
         selectImageButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -92,37 +82,6 @@ public class GalleryFragment extends Fragment {
         startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
     }
 
-    private void detectText() {
-        Log.i("Notif:", "Beginner worker text detection!");
-        Uri image_uri = imageUri;
-        final InputStream stream;
-        InputImage image = null;
-        try {
-            image = InputImage.fromFilePath(getContext(), image_uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        TextRecognizer recognizer = TextRecognition.getClient();
-        Task<Text> result =
-                recognizer.process(image)
-                        .addOnSuccessListener(new OnSuccessListener<Text>() {
-                            @Override
-                            public void onSuccess(Text visionText) {
-                                // Task completed successfully
-                                // ...
-                                Log.i("Text processed!", visionText.getText());
-                            }
-                        })
-                        .addOnFailureListener(
-                                new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Task failed with an exception
-                                        // ...
-                                    }
-                                });
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -133,6 +92,13 @@ public class GalleryFragment extends Fragment {
             if (requestCode == SELECT_PICTURE) {
                 // Get the url of the image from data
                 Uri selectedImageUri = data.getData();
+
+                // update viewmodel image
+                try {
+                    translationViewModel.setImage(InputImage.fromFilePath(getContext(), selectedImageUri));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 imageUri = selectedImageUri;
                 if (null != selectedImageUri) {
                     // update the preview image in the layout
@@ -143,8 +109,6 @@ public class GalleryFragment extends Fragment {
                         im.setAdjustViewBounds(true);
                         parent.addView(im);
                     }
-
-                    translateButton.setVisibility(View.VISIBLE);
                 }
             }
         }
