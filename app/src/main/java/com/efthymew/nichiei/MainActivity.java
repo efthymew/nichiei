@@ -14,6 +14,9 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.BindingConversion;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private TranslationDialogViewModel translationViewModel;
     private TranslationDialogFragment newFragment;
+    private DataBindingUtil binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +43,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         final FloatingActionButton fab = findViewById(R.id.fab);
         newFragment = TranslationDialogFragment.newInstance();
-        translationViewModel = ViewModelProviders.of(this).get(TranslationDialogViewModel.class);
-
+        binding =
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newFragment.detectText(translationViewModel, getSupportFragmentManager(), TranslationDialogFragment.TAG);
+                newFragment.detectText(getSupportFragmentManager(), TranslationDialogFragment.TAG);
             }
         });
 

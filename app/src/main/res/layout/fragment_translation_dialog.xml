@@ -5,7 +5,17 @@
     android:layout_height="match_parent"
     android:id="@+id/dialog_root"
     tools:context=".ui.translation_dialog.TranslationDialogFragment">
-
+    <data>
+        <variable
+            android:name="translationViewModel"
+            android:type="com.efthymew.nichiei.ui.translation_dialog.TranslationDialogViewModel" />
+    </data>
     <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/translatedText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@={translationViewModel.translation}" />
 
 </FrameLayout>

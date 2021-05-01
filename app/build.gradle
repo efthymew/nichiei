@@ -10,6 +10,10 @@ android {
         exclude 'META-INF/INDEX.LIST'
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.efthymew.nichiei"
         minSdkVersion 16

@@ -63,7 +63,7 @@ public class GalleryFragment extends Fragment {
         cr = getContext().getContentResolver();
         selectImageButton = root.findViewById(R.id.BSelectImage);
         parent = root.findViewById(R.id.linear_layout_for_images);
-        translationViewModel = ViewModelProviders.of(getActivity()).get(TranslationDialogViewModel.class);
+        translationViewModel = 
         selectImageButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

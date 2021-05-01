@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -36,10 +38,8 @@ import java.io.IOException;
  * create an instance of this fragment.
  */
 public class TranslationDialogFragment extends DialogFragment {
-    private TranslationDialogViewModel translationViewModel;
-    private FrameLayout parent;
     public static String TAG = "TranslationDialog";
-
+    public ViewDataBinding binding;
     public TranslationDialogFragment() {
         // Required empty public constructor
     }
@@ -56,17 +56,12 @@ public class TranslationDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_translation_dialog, container, false);
-        parent = v.findViewById(R.id.dialog_root);
-        // Inflate the layout for this fragment
-        translationViewModel = ViewModelProviders.of(getActivity()).get(TranslationDialogViewModel.class);
-        TextView text = new TextView(getContext());
-        text.setText(translationViewModel.getTranslation().getValue());
-        parent.addView(text);
+        binding = DataBindingUtil.bind(v);
         return v;
     }
 
-    public void detectText(final TranslationDialogViewModel viewModel, final FragmentManager ft, final String tag) {
-        InputImage image = viewModel.getImage().getValue();
+    public void detectText(final FragmentManager ft, final String tag) {
+        InputImage image = viewModel.getImage();
         if (image == null) {
             Log.i("Notif", "No image selected!");
             return;

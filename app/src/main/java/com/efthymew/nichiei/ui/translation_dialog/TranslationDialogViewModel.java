@@ -1,31 +1,37 @@
 package com.efthymew.nichiei.ui.translation_dialog;
 
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.mlkit.vision.common.InputImage;
 
-public class TranslationDialogViewModel extends ViewModel {
-    private MutableLiveData<InputImage> image = new MutableLiveData<>();
-    private MutableLiveData<String> translation = new MutableLiveData<>();
+public class TranslationDialogViewModel extends BaseObservable {
+    private InputImage image = null;
+    private String translation = null;
 
     public TranslationDialogViewModel() {
     }
 
-    public LiveData<InputImage> getImage() {
+    @Bindable
+    public InputImage getImage() {
         return image;
     }
 
     public void setImage(InputImage newImage) {
-        image.setValue(newImage);
+        this.image = newImage;
     }
 
-    public LiveData<String> getTranslation() {
+    @Bindable
+    public String getTranslation() {
         return translation;
     }
 
     public void setTranslation(String text) {
-        translation.setValue(text);
+        this.translation = text;
+        notifyPropertyChanged(BR.translation);
     }
 }
