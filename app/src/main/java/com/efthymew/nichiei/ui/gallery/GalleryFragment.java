@@ -55,6 +55,7 @@ public class GalleryFragment extends Fragment {
 
     private LinearLayout parent;
     int SELECT_PICTURE = 200;
+    //this app is cool
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
