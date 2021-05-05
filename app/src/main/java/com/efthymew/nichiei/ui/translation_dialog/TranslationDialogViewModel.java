@@ -2,11 +2,11 @@ package com.efthymew.nichiei.ui.translation_dialog;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.efthymew.nichiei.BR;
 import com.google.mlkit.vision.common.InputImage;
 
 public class TranslationDialogViewModel extends BaseObservable {

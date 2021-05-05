@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/dialog_root"
-    tools:context=".ui.translation_dialog.TranslationDialogFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            android:name="translationViewModel"
-            android:type="com.efthymew.nichiei.ui.translation_dialog.TranslationDialogViewModel" />
+            name="translationViewModel"
+            type="com.efthymew.nichiei.ui.translation_dialog.TranslationDialogViewModel" />
     </data>
-    <!-- TODO: Update blank fragment layout -->
-
-    <TextView
-        android:id="@+id/translatedText"
+    <FrameLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@={translationViewModel.translation}" />
+        android:id="@+id/dialog_root"
+        tools:context=".ui.translation_dialog.TranslationDialogFragment">
+        <!-- TODO: Update blank fragment layout -->
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/translatedText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@={translationViewModel.translation}" />
+
+    </FrameLayout>
+</layout>

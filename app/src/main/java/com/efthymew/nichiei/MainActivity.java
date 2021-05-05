@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
+import com.efthymew.nichiei.databinding.FragmentTranslationDialogBinding;
 import com.efthymew.nichiei.ui.translation_dialog.TranslationDialogFragment;
 import com.efthymew.nichiei.ui.translation_dialog.TranslationDialogViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,9 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private TranslationDialogViewModel translationViewModel;
-    private TranslationDialogFragment newFragment;
-    private DataBindingUtil binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,14 +41,6 @@ public class MainActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final FloatingActionButton fab = findViewById(R.id.fab);
-        newFragment = TranslationDialogFragment.newInstance();
-        binding =
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                newFragment.detectText(getSupportFragmentManager(), TranslationDialogFragment.TAG);
-            }
-        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -64,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDestinationChanged(@NonNull NavController controller,
                                              @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                translationViewModel.setImage(null);
                 if(destination.getId() == R.id.nav_gallery) {
                     fab.show();
                     toolbar.setVisibility(View.GONE);

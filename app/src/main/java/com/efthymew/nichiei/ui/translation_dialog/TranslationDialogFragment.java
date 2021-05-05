@@ -1,9 +1,11 @@
 package com.efthymew.nichiei.ui.translation_dialog;
 
+import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.DialogFragment;
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Log;
@@ -22,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.efthymew.nichiei.R;
+import com.efthymew.nichiei.databinding.FragmentTranslationDialogBinding;
+import com.efthymew.nichiei.ui.gallery.GalleryViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,7 +44,10 @@ import java.io.IOException;
  */
 public class TranslationDialogFragment extends DialogFragment {
     public static String TAG = "TranslationDialog";
-    public ViewDataBinding binding;
+    public FragmentTranslationDialogBinding translationDialogBinding;
+    public GalleryViewModel imageModel;
+    private Dialog dialog;
+
     public TranslationDialogFragment() {
         // Required empty public constructor
     }
@@ -51,17 +59,18 @@ public class TranslationDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        imageModel = new ViewModelProvider(requireActivity()).get(GalleryViewModel.class);
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_translation_dialog, container, false);
-        binding = DataBindingUtil.bind(v);
-        return v;
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        dialog = builder.create();
+        return dialog;
     }
 
-    public void detectText(final FragmentManager ft, final String tag) {
-        InputImage image = viewModel.getImage();
+    public void detectText(final TranslationDialogViewModel model) {
+        InputImage image = imageModel.getImage().getValue();
         if (image == null) {
             Log.i("Notif", "No image selected!");
             return;
@@ -76,8 +85,7 @@ public class TranslationDialogFragment extends DialogFragment {
                                 // Task completed successfully
                                 // ...
                                 Log.i("Text processed!", visionText.getText());
-                                viewModel.setTranslation(visionText.getText());
-                                show(ft, tag);
+                                model.setTranslation(visionText.getText());
                             }
                         })
                         .addOnFailureListener(

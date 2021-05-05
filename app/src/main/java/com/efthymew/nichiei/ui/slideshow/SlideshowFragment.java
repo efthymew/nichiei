@@ -27,18 +27,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SlideshowFragment extends Fragment {
+import java.util.Locale;
 
-    private ListView mangaList;
+public class SlideshowFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        // Instantiate the RequestQueue.
-        mangaList = new ListView(getContext());
+        ListView list = root.findViewById(R.id.list);
+        loadPageData(0, list);
+
+
+
+// Add the request to the RequestQueue.
+
+        return root;
+    }
+
+    private void loadPageData(int offset, ListView listView) {
+        String url = String.format(Locale.getDefault(), "https://kitsu.io/api/edge/manga?page[limit]=10&page[offset]=%d&sort=-favoritesCount,-favoritesCount", offset);
+        // Instantiate the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        String url ="https://kitsu.io/api/edge/manga?page[limit]=10&page[offset]=0&sort=-favoritesCount,-favoritesCount";
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -50,6 +59,7 @@ public class SlideshowFragment extends Fragment {
                         try {
                             JSONObject respObj = new JSONObject(response);
                             JSONArray mangas = respObj.getJSONArray("data");
+
                             JSONObject links = respObj.getJSONObject("links");
                             Log.i("manga list length: ", String.valueOf(mangas.length()));
                             for (int i = 0; i < mangas.length(); i++) {
@@ -64,12 +74,9 @@ public class SlideshowFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                textView.setText("That didn't work!");
+
             }
         });
-
-// Add the request to the RequestQueue.
         queue.add(stringRequest);
-        return root;
     }
 }

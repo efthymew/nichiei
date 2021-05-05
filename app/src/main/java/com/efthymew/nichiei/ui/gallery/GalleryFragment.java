@@ -23,13 +23,17 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.efthymew.nichiei.R;
+import com.efthymew.nichiei.databinding.FragmentTranslationDialogBinding;
+import com.efthymew.nichiei.ui.translation_dialog.TranslationDialogFragment;
 import com.efthymew.nichiei.ui.translation_dialog.TranslationDialogViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -52,19 +56,42 @@ public class GalleryFragment extends Fragment {
     private ContentResolver cr;
     private TranslationDialogViewModel translationViewModel;
     private List<String> text;
+    private TranslationDialogFragment newFragment;
+    private FragmentTranslationDialogBinding translationDialogBinding;
+    public GalleryViewModel imageModel;
 
     private LinearLayout parent;
     int SELECT_PICTURE = 200;
     //this app is cool
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        imageModel = new ViewModelProvider(requireActivity()).get(GalleryViewModel.class);
+    }
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         cr = getContext().getContentResolver();
         selectImageButton = root.findViewById(R.id.BSelectImage);
+        newFragment = TranslationDialogFragment.newInstance();
+
+        final FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+//        translationDialogBinding = newFragment.translationDialogBinding;
+//
+//        translationViewModel = new TranslationDialogViewModel();
+//        translationDialogBinding.setTranslationViewModel(translationViewModel);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!newFragment.isAdded())
+                    newFragment.show(getActivity().getSupportFragmentManager(), TranslationDialogFragment.TAG);
+            }
+        });
+
         parent = root.findViewById(R.id.linear_layout_for_images);
-        translationViewModel = 
         selectImageButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -96,7 +123,7 @@ public class GalleryFragment extends Fragment {
 
                 // update viewmodel image
                 try {
-                    translationViewModel.setImage(InputImage.fromFilePath(getContext(), selectedImageUri));
+                    imageModel.setImage(InputImage.fromFilePath(getContext(), selectedImageUri));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
